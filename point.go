@@ -24,3 +24,14 @@ func (points Points) Less(i, j int) bool {
 func (points Points) Swap(i, j int) {
 	points[i], points[j] = points[j], points[i]
 }
+
+func determinant(a, b, c Point) float64 {
+	return b.x*c.y + a.x*b.y + c.x*a.y - (b.x*a.y + a.x*c.y + c.x*b.y)
+}
+
+func makesRightTurn(a, b, c Point) bool {
+	if determinant(a, b, c) < 0 {
+		return true
+	}
+	return false
+}
