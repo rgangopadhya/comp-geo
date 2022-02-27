@@ -1,5 +1,11 @@
 package main
 
+import (
+	"math/rand"
+)
+
+var RANGE = []float64{-2.0, 2.0}
+
 type Point struct {
 	x float64
 	y float64
@@ -34,4 +40,28 @@ func makesRightTurn(a, b, c Point) bool {
 		return true
 	}
 	return false
+}
+
+func randF() float64 {
+	l, r := RANGE[0], RANGE[1]
+	// v -> 0 - 1
+	// (1 - v) * l + (v) * r
+	v := rand.Float64()
+	return (1-v)*l + v*r
+}
+
+func randomPoint() Point {
+	return Point{x: randF(), y: randF()}
+}
+
+func randomSample(size int) Points {
+	result := make(Points, size)
+	for i := 0; i < size; i++ {
+		result = append(result, randomPoint())
+	}
+	return result
+}
+
+func makePoint(x, y float64) Point {
+	return Point{x: x, y: y}
 }
