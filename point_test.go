@@ -31,3 +31,18 @@ func TestPoints(t *testing.T) {
 		t.Fatalf("Didn't sort?")
 	}
 }
+
+func TestMakesRightTurn(t *testing.T) {
+	a := makePoint(0.8, 0.98)
+	b := makePoint(2.72, 1.56)
+	c := makePoint(2.34, 3.24)
+	d := makePoint(4.54, 0.36)
+
+	if makesRightTurn(a, b, c) {
+		t.Fatal("Expected", a, b, c, "NOT to make a right turn")
+	}
+
+	if !makesRightTurn(a, b, d) {
+		t.Fatal("Expected", a, b, d, "TO make a right turn")
+	}
+}
