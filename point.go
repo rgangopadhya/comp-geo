@@ -18,7 +18,7 @@ func myFunc(a, b int) int {
 }
 
 func (points Points) Len() int {
-	return cap(points)
+	return len(points)
 }
 
 func (points Points) Less(i, j int) bool {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -8,9 +9,15 @@ var Square = Points{makePoint(0, 0), makePoint(1, 0), makePoint(1, 1), makePoint
 
 var Triangle = Points{makePoint(0, 0), makePoint(1, 0), makePoint(1, 1)}
 
-var Hexagon = Points{makePoint(0, 0), makePoint(0.5, 0), makePoint(0.75, 0.25), makePoint(1, 0.5), makePoint(1, 1)}
-
 var Pentagon = Points{
+	makePoint(-0.62, 1.56),
+	makePoint(0.34, 1.54),
+	makePoint(0.62, 1),
+	makePoint(0.36, 0.32),
+	makePoint(-1, 1),
+}
+
+var Hexagon = Points{
 	// these points form the boundary
 	makePoint(-0.67, 2.01),
 	makePoint(1.39, 1.55),
@@ -20,14 +27,14 @@ var Pentagon = Points{
 	makePoint(-1.9, 1),
 }
 
-var PentagonWithContainedPoints = append(Pentagon, Points{
+var InteriorToHexagonPoints = Points{
 	// these points are within the interior
 	makePoint(-0.97, 0.57),
 	makePoint(-0.63, 1.43),
 	makePoint(0.57, 1.29),
 	makePoint(0.23, 0.29),
 	makePoint(-0.57, -0.25),
-}...)
+}
 
 func pointsEqual(pointsA, pointsB Points) bool {
 	if len(pointsA) != len(pointsB) {
@@ -50,11 +57,21 @@ func pointsEqual(pointsA, pointsB Points) bool {
 }
 
 func TestConvexHull(t *testing.T) {
-	polygons := []Points{Square, Triangle, Pentagon, Hexagon}	
+	polygons := []Points{Square, Triangle, Pentagon, Hexagon}
 	for i, polygon := range polygons {
+		fmt.Println("About to test", i, polygon)
 		hull := convexHull(polygon)
 		if !pointsEqual(hull, polygon) {
 			t.Fatal("Expected polygon to be hull, but wasn't", i, hull, polygon)
 		}
+	}
+
+	var hexagonCopy = make(Points, len(Hexagon))
+	copy(hexagonCopy, Hexagon)
+	var hexagonWithContainedPoints = make(Points, len(Hexagon)+len(InteriorToHexagonPoints))
+	hexagonWithContainedPoints = append(hexagonCopy, InteriorToHexagonPoints...)
+	hull := convexHull(hexagonWithContainedPoints)
+	if !pointsEqual(hull, Hexagon) {
+		t.Fatal("Expected hexagonWithContainedPoints hull to be hexagon")
 	}
 }
